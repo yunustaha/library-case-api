@@ -1,0 +1,23 @@
+{
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "target": "es5",
+      // "module": "commonjs",
+      // "moduleResolution": "node",
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "typeRoots": ["./types", "./node_modules/@types"],
+      "types": ["node", "express"],
+      "paths": {
+        "@ts/*": ["./src/ts/*"] // src icerisindeki ts klasorune kolay erisim icin alias tanimlamasi
+      }
+   }
+}

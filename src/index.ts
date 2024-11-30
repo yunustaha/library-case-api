@@ -38,7 +38,7 @@ AppDataSource.initialize()
   .then(() => console.log("Database connected succesfuly!"))
   .catch((err) => console.log("Error connecting to database! ", err));
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
 });

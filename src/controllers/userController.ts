@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import userService from "../services/userService";
 import bookService from "../services/bookService";
 import borrowService from "../services/borrowService";
+import createError from "http-errors";
 
 class UserController {
   postUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -68,6 +69,18 @@ class UserController {
 
       if (bookError) {
         next(bookError);
+        return;
+      }
+
+      const { borrow: bookBorrowInfo } =
+        await borrowService.fetchNotReturnedBorrowWithBook(bookId);
+
+      if (bookBorrowInfo) {
+        next(
+          createError.Conflict(
+            "This book has already been borrowed by another user"
+          )
+        );
         return;
       }
 

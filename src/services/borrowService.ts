@@ -9,6 +9,19 @@ class BorrowService {
     this.borrowRepository = AppDataSource.getRepository(Borrow);
   }
 
+  fetchNotReturnedBorrowWithBook = async (
+    bookId: string
+  ): Promise<{ borrow: Borrow; error?: Error }> => {
+    const borrow = await this.borrowRepository.findOne({
+      where: {
+        book: { id: parseInt(bookId) },
+        returnDate: IsNull(),
+      },
+    });
+
+    return { borrow };
+  };
+
   insertBorrowRecordForUser = async (
     userId: string,
     bookId: string

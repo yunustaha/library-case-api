@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import { AppDataSource } from "./data-source";
 import errorHandlerMiddleware from "./middlewares/errorHandler";
+import bookRoutes from "./routes/bookRoutes";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get("/", async (req, res, next) => {
   }
 });
 
+app.use("/books", bookRoutes);
 app.use(async (req, res, next) => {
   next(createError.NotFound());
 });

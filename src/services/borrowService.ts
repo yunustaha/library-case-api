@@ -23,14 +23,14 @@ class BorrowService {
       if (!existingRecord.returnDate) {
         return {
           borrow: existingRecord,
-          error: createError.BadRequest(
+          error: createError.Conflict(
             "This user has already borrowed this book"
           ),
         };
       } else {
         return {
           borrow: existingRecord,
-          error: createError.BadRequest(
+          error: createError.Conflict(
             "This book has already been borrowed and returned, and it cannot be borrowed again."
           ),
         };

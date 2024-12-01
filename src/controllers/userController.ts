@@ -72,7 +72,7 @@ class UserController {
       }
 
       const { borrow, error: borrowError } =
-        await borrowService.insertOrUpdateBorrowRecordForUser(id, bookId);
+        await borrowService.insertBorrowRecordForUser(id, bookId);
 
       if (borrowError) {
         next(borrowError);

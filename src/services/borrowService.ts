@@ -8,7 +8,8 @@ class BorrowService {
   constructor() {
     this.borrowRepository = AppDataSource.getRepository(Borrow);
   }
-  insertOrUpdateBorrowRecordForUser = async (
+
+  insertBorrowRecordForUser = async (
     userId: string,
     bookId: string
   ): Promise<{ borrow: Borrow; error?: Error }> => {

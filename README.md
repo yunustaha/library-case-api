@@ -56,25 +56,7 @@ npm run dev
 
 The server will start running on `http://localhost:3000`.
 
-### 5. API Endpoints
-
-#### Users
-
-- **POST /users**: Create a new user
-- **GET /users/{id}**: Fetch a user by ID
-- **GET /users/{id}/borrows**: Fetch a list of borrowed books for a specific user
-
-#### Books
-
-- **POST /books**: Add a new book to the library
-- **GET /books/{id}**: Fetch a book by its ID
-
-#### Borrowing Books
-
-- **POST /borrow/{userId}/{bookId}**: Borrow a book for a specific user
-- **PUT /return/{userId}/{bookId}**: Return a borrowed book and update the score for the book
-
-### 6. Error Handling
+### 5. Error Handling
 
 The following error responses are used by the API:
 
@@ -83,6 +65,6 @@ The following error responses are used by the API:
 - **409 Conflict**: Returned when a book is already borrowed by another user.
 - **500 Internal Server Error**: Returned for any unexpected server errors.
 
-### 7. Contributing
+### 6. Contributing
 
 If you'd like to contribute to this project, feel free to fork the repository, create a branch, and submit a pull request with any improvements or fixes you have made.

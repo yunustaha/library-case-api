@@ -1,68 +1,66 @@
 import { AppDataSource } from "../data-source";
 import { Book } from "../entity/Book";
 import createError from "http-errors";
+import { Repository } from "typeorm";
 
-const fetchBooks = async () => {
-  const bookRepository = AppDataSource.getRepository(Book);
+class BookService {
+  private bookRepository: Repository<Book>;
 
-  const data = await bookRepository.find({
-    select: {
-      id: true,
-      name: true,
-    },
-  });
-
-  return data;
-};
-
-const fetchBook = async (bookId: string, notFoundError = false) => {
-  const bookRepository = AppDataSource.getRepository(Book);
-
-  const data = await bookRepository.findOne({
-    where: { id: parseInt(bookId) },
-    select: { id: true, name: true },
-  });
-
-  if (!data && notFoundError) {
-    throw createError.NotFound("Book not found");
+  constructor() {
+    this.bookRepository = AppDataSource.getRepository(Book);
   }
 
-  return data;
-};
+  async fetchBooks() {
+    const books = await this.bookRepository.find({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
 
-const fetchBookWithScore = async (bookId: string) => {
-  const bookRepository = AppDataSource.getRepository(Book);
+    return { books };
+  }
 
-  const data = await bookRepository
-    .createQueryBuilder("book")
-    .leftJoinAndSelect("book.borrows", "borrow")
-    .select("book.id", "id")
-    .addSelect("book.name", "name")
-    .addSelect("COALESCE(AVG(borrow.score), -1)", "score")
-    .where("book.id = :bookId", { bookId })
-    .groupBy("book.id")
-    .getRawOne();
+  async fetchBook(bookId: string): Promise<{ book: Book; error?: Error }> {
+    const book = await this.bookRepository.findOne({
+      where: { id: parseInt(bookId) },
+      select: { id: true, name: true },
+    });
 
-  return data;
-};
+    if (!book) {
+      return { book, error: createError.NotFound("Book not found") };
+    }
 
-const insertBook = async (name: string) => {
-  const bookRepository = AppDataSource.getRepository(Book);
+    return { book };
+  }
 
-  const newBook = bookRepository.create({
-    name,
-  });
+  async fetchBookWithScore(
+    bookId: string
+  ): Promise<{ data: any; error?: Error }> {
+    const data = await this.bookRepository
+      .createQueryBuilder("book")
+      .leftJoinAndSelect("book.borrows", "borrow")
+      .select("book.id", "id")
+      .addSelect("book.name", "name")
+      .addSelect("COALESCE(ROUND(AVG(borrow.score), 2), -1)", "score")
+      .where("book.id = :bookId", { bookId })
+      .groupBy("book.id")
+      .getRawOne();
 
-  const data = await bookRepository.save(newBook);
+    if (!data) {
+      return { data, error: createError.NotFound("Book not found") };
+    }
 
-  return data;
-};
+    return { data };
+  }
 
-const bookService = {
-  fetchBooks,
-  fetchBook,
-  fetchBookWithScore,
-  insertBook,
-};
+  async insertBook(name: string) {
+    const newBook = this.bookRepository.create({ name });
 
-export default bookService;
+    const book = await this.bookRepository.save(newBook);
+
+    return { book };
+  }
+}
+
+export default new BookService();

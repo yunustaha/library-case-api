@@ -1,53 +1,49 @@
 import { NextFunction, Request, Response } from "express";
 import bookService from "../services/bookService";
-import bookSchema from "../schemas/bookSchema";
 
-const postBook = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const {
-      body: { name },
-    } = req;
+class BookController {
+  postBook = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {
+        body: { name },
+      } = req;
 
-    await bookSchema.postBook.validateAsync({ name });
+      const { book } = await bookService.insertBook(name);
 
-    const data = await bookService.insertBook(name);
+      res.status(201).json({ success: true, insertId: book.id });
+    } catch (error) {
+      next(error);
+    }
+  };
 
-    res.send({ success: true, insertId: data.id });
-  } catch (error) {
-    next(error);
-  }
-};
+  getBooks = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { books } = await bookService.fetchBooks();
 
-const getBooks = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = await bookService.fetchBooks();
+      res.send(books);
+    } catch (error) {
+      next(error);
+    }
+  };
 
-    res.send(data);
-  } catch (error) {
-    next(error);
-  }
-};
+  getBook = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {
+        params: { id },
+      } = req;
 
-const getBook = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const {
-      params: { id },
-    } = req;
+      const { data, error } = await bookService.fetchBookWithScore(id);
 
-    await bookSchema.getBook.validateAsync({ id });
+      if (error) {
+        next(error);
+        return;
+      }
 
-    const data = await bookService.fetchBookWithScore(id);
+      res.send(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+}
 
-    res.send(data);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const bookController = {
-  postBook,
-  getBooks,
-  getBook,
-};
-
-export default bookController;
+export default new BookController();

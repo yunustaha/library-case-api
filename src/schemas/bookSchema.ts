@@ -1,11 +1,15 @@
 import Joi from "joi";
 
 const postBook = Joi.object({
-  name: Joi.string().min(3).max(100).required(),
+  body: Joi.object({
+    name: Joi.string().min(3).max(100).required(),
+  }).required(),
 });
 
 const getBook = Joi.object({
-  id: Joi.number().integer().positive().required(),
+  params: Joi.object({
+    id: Joi.number().integer().positive().required(),
+  }).required(),
 });
 
 const bookSchema = {

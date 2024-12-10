@@ -41,11 +41,11 @@ npm install
 Create a `.env` file in the root of the project and add the following environment variables:
 
 ```env
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_USER=your_database_user
-DATABASE_PASSWORD=your_database_password
-DATABASE_NAME=your_database_name
+PORT=5432
+DB_HOST=localhost
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+DB_NAME=your_database_name
 ```
 
 ### 4. Run the Development Server

@@ -41,7 +41,7 @@ npm install
 Create a `.env` file in the root of the project and add the following environment variables:
 
 ```env
-PORT=5432
+PORT=3000
 DB_HOST=localhost
 DB_USER=your_database_user
 DB_PASSWORD=your_database_password
